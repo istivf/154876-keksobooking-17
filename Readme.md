@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Георгий Афонин](https://up.htmlacademy.ru/javascript/17/user/154876).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Самойленко] (https://htmlacademy.ru/profile/id999539).
 
 ---
 
