@@ -1,9 +1,16 @@
 'use strict';
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
+var form = document.querySelector('.ad-form');
+var formFielsets = form.querySelectorAll('fieldset');
+var mainPin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+
+for (var a = 0; a < formFielsets.length; a++) {
+  formFielsets[a].setAttribute('disabled', 'disabled');
+}
 
 var createAds = function (amount) {
   var adsList = [];
@@ -44,5 +51,14 @@ var displayAds = function (ads) {
   mapPins.appendChild(pins);
 };
 
-var ads = createAds(8);
-displayAds(ads);
+addressInput.value = mainPin.offsetLeft + ', ' + mainPin.offsetTop;
+
+mainPin.addEventListener('click', function () {
+  var ads = createAds(8);
+  map.classList.remove('map--faded');
+  displayAds(ads);
+  form.classList.remove('ad-form--disabled');
+  for (var i = 0; i < formFielsets.length; i++) {
+    formFielsets[i].removeAttribute('disabled');
+  }
+});
