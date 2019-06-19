@@ -7,6 +7,8 @@ var form = document.querySelector('.ad-form');
 var formFielsets = form.querySelectorAll('fieldset');
 var mainPin = document.querySelector('.map__pin--main');
 var addressInput = document.querySelector('#address');
+var housingType = form.querySelector('#type');
+var minPrice = form.querySelector('#price');
 
 for (var a = 0; a < formFielsets.length; a++) {
   formFielsets[a].setAttribute('disabled', 'disabled');
@@ -62,3 +64,7 @@ mainPin.addEventListener('click', function () {
     formFielsets[i].removeAttribute('disabled');
   }
 });
+
+if (housingType.value === 'bungalo') {
+  minPrice.setAttribute('min', 1);
+}
