@@ -11,6 +11,11 @@ var housingType = form.querySelector('#type');
 var minPrice = form.querySelector('#price');
 var timeIn = form.querySelector('#timein');
 var timeOut = form.querySelector('#timeout');
+var main = document.querySelector('main');
+var PIN_WIDTH = 65;
+var PIN_HEIGHT = 85;
+
+var adsAdded = false;
 
 window.onload = function () {
   if (housingType.value === 'flat') {
@@ -49,7 +54,7 @@ var createPin = function (ad) {
   pin.firstChild.src = ad.author.avatar;
   pin.firstChild.alt = ad.offer.type;
   pin.style.left = (ad.location.x - 25) + 'px';
-  pin.style.top = (ad.location.y - 70) + 'px';
+  pin.style.top = (ad.location.y) + 'px';
   return pin;
 };
 
@@ -64,14 +69,50 @@ var displayAds = function (ads) {
 
 addressInput.value = mainPin.offsetLeft + ', ' + mainPin.offsetTop;
 
-mainPin.addEventListener('click', function () {
-  var ads = createAds(8);
+mainPin.addEventListener('mousedown', function () {
+  if (!adsAdded) {
+    var ads = createAds(8);
+    displayAds(ads);
+    adsAdded = true;
+  }
   map.classList.remove('map--faded');
-  displayAds(ads);
   form.classList.remove('ad-form--disabled');
   for (var i = 0; i < formFielsets.length; i++) {
     formFielsets[i].removeAttribute('disabled');
   }
+
+  var onMouseMove = function (moveEvt) {
+    var shift = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mainPin.style.top = (shift.y - main.offsetTop - PIN_HEIGHT) + 'px';
+    mainPin.style.left = (shift.x - main.offsetLeft - (PIN_WIDTH / 2)) + 'px';
+
+    if (mainPin.offsetTop < (130)) {
+      mainPin.style.top = 130 + 'px';
+    }
+    if (mainPin.offsetTop > 630) {
+      mainPin.style.top = 630 + 'px';
+    }
+    if (mainPin.offsetLeft < 0) {
+      mainPin.style.left = 0 + 'px';
+    }
+    if (mainPin.offsetLeft > 1200) {
+      mainPin.style.left = 1200 + 'px';
+    }
+    addressInput.value = mainPin.offsetLeft + ', ' + mainPin.offsetTop;
+  };
+
+  var onMouseUp = function () {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+
 });
 
 housingType.addEventListener('input', function () {
