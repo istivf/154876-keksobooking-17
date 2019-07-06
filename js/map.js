@@ -5,6 +5,7 @@
   var mapPins = document.querySelector('.map__pins');
   var main = document.querySelector('main');
   var mainPin = document.querySelector('.map__pin--main');
+  var housingType = document.querySelector('#type');
   var form = document.querySelector('.ad-form');
   var formFielsets = form.querySelectorAll('fieldset');
   var addressInput = document.querySelector('#address');
@@ -15,7 +16,7 @@
 
   mainPin.addEventListener('mousedown', function () {
     if (!adsAdded) {
-      var pins = window.getAds(window.ads);
+      var pins = window.getAds(window.actualAds);
       mapPins.appendChild(pins);
       adsAdded = true;
     }
@@ -56,6 +57,19 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-
   });
+
+  window.rerenderPins = function () {
+    var pins = document.querySelectorAll('[type="button"]');
+    for (var i = 0; i < pins.length; i++) {
+      mapPins.removeChild(pins[i]);
+    }
+    window.actualAds = window.ads.filter(function (ad) {
+      return ad.offer.type === housingType.value;
+    }).filter(function (ad, index) {
+      return index < window.MAX_ADS_AMOUNT;
+    });
+    pins = window.getAds(window.actualAds);
+    mapPins.appendChild(pins);
+  };
 })();
