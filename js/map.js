@@ -20,6 +20,7 @@
       mapPins.appendChild(pins);
       adsAdded = true;
     }
+
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
     for (var i = 0; i < formFielsets.length; i++) {
