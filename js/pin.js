@@ -11,6 +11,10 @@
 
     var addPinClickHandler = function (pin, pinInfo) {
       pin.addEventListener('mousedown', function () {
+        var adCards = map.querySelectorAll('.map__card');
+        adCards.forEach(function (el) {
+          map.removeChild(el);
+        });
         var card = cardTemplate.cloneNode(true);
 
         card.children[0].src = pinInfo.author.avatar;

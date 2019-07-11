@@ -39,22 +39,18 @@
       case 'bungalo':
         minPrice.setAttribute('min', 0);
         minPrice.placeholder = '0';
-        window.rerenderPins();
         break;
       case 'flat':
         minPrice.setAttribute('min', 1000);
         minPrice.placeholder = '1000';
-        window.rerenderPins();
         break;
       case 'house':
         minPrice.setAttribute('min', 5000);
         minPrice.placeholder = '5000';
-        window.rerenderPins();
         break;
       case 'palace':
         minPrice.setAttribute('min', 10000);
         minPrice.placeholder = '10000';
-        window.rerenderPins();
         break;
     }
   });
