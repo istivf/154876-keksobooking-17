@@ -6,6 +6,9 @@
   var main = document.querySelector('main');
   var mainPin = document.querySelector('.map__pin--main');
   var housingType = document.querySelector('#housing-type');
+  var housingPrice = document.querySelector('#housing-price');
+  var housingRooms = document.querySelector('#housing-rooms');
+  var housingGuests = document.querySelector('#housing-guests');
   var form = document.querySelector('.ad-form');
   var formFielsets = form.querySelectorAll('fieldset');
   var addressInput = document.querySelector('#address');
@@ -17,6 +20,7 @@
   mainPin.addEventListener('mousedown', function (evt) {
     if (!adsAdded) {
       var pins = window.getAds(window.ads);
+      console.log(window.ads);
       mapPins.appendChild(pins);
       adsAdded = true;
     }
@@ -81,6 +85,34 @@
   housingType.addEventListener('input', function () {
     window.rerenderPins();
   });
+  housingPrice.addEventListener('input', function () {
+    window.rerenderPins();
+  });
+  housingRooms.addEventListener('input', function () {
+    window.rerenderPins();
+  });
+  housingGuests.addEventListener('input', function () {
+    window.rerenderPins();
+  });
+
+  var getAccordance = function (ad) {
+    var accordance = 0;
+
+    if (ad.offer.type === housingType.value) {
+      accordance++;
+    }
+    if (ad.offer.price === housingPrice.value) {
+      accordance++;
+    }
+    if (ad.offer.rooms === housingRooms.value) {
+      accordance++;
+    }
+    if (ad.offer.guests === housingGuests.value) {
+      accordance++;
+    }
+
+    return accordance;
+  };
 
   window.rerenderPins = function () {
     var pins = mapPins.querySelectorAll('[type="button"]');
@@ -91,11 +123,25 @@
     adCards.forEach(function (el) {
       map.removeChild(el);
     });
-    window.ads = window.xhrResponse.filter(function (ad) {
-      return ad.offer.type === housingType.value;
-    }).filter(function (ad, index) {
-      return index < window.MAX_ADS_AMOUNT;
-    });
+    // window.ads = window.xhrResponse.filter(function (ad) {
+    //   return ad.offer.type === housingType.value;
+    // });
+    // window.ads = window.xhrResponse.sort(function (first, second) {
+    //   return getAccordance(second) - getAccordance(first);
+    // }).slice(0, window.MAX_ADS_AMOUNT);
+    window.ads = window.xhrResponse.filter(function (el) {
+      if (housingType.value === 'any') {
+        return true;
+      }
+      return el.offer.type === housingType.value;
+    })
+    .filter(function (el) {
+      if (housingRooms.value === 'any') {
+        return true;
+      }
+      return el.offer.rooms === housingRooms.value;
+    })
+    .slice(0, window.MAX_ADS_AMOUNT);
     pins = window.getAds(window.ads);
     mapPins.appendChild(pins);
   };
