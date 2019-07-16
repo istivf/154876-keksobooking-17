@@ -16,44 +16,62 @@
           map.removeChild(el);
         });
         var card = cardTemplate.cloneNode(true);
+        var cardImg = card.querySelector('.popup__avatar');
+        var cardTitle = card.querySelector('.popup__title');
+        var cardAddress = card.querySelector('.popup__text--address');
+        var cardPrice = card.querySelector('.popup__text--price');
+        var cardType = card.querySelector('.popup__type');
+        var cardRooms = card.querySelector('.popup__text--capacity');
+        var cardTime = card.querySelector('.popup__text--time');
+        var cardFeaturesList = card.querySelectorAll('.popup__features');
+        var cardFeaturesItems = card.querySelectorAll('.popup__feature');
+        var cardDesc = card.querySelector('.popup__description');
+        var cardPhotos = card.querySelector('.popup__photos');
+        var cardCloseBtn = card.querySelector('.popup__close');
 
-        card.children[0].src = pinInfo.author.avatar;
-        card.children[2].textContent = pinInfo.offer.title;
-        card.children[3].textContent = pinInfo.offer.address;
-        card.children[4].textContent = pinInfo.offer.price + '₽/ночь';
+        cardImg.src = pinInfo.author.avatar;
+        cardTitle.textContent = pinInfo.offer.title;
+        cardAddress.textContent = pinInfo.offer.address;
+        cardPrice.textContent = pinInfo.offer.price + '₽/ночь';
         switch (pinInfo.offer.type) {
           case 'flat':
-            card.children[5].textContent = 'Квартира';
+            cardType.textContent = 'Квартира';
             break;
           case 'bungalo':
-            card.children[5].textContent = 'Бунгало';
+            cardType.textContent = 'Бунгало';
             break;
           case 'house':
-            card.children[5].textContent = 'Дом';
+            cardType.textContent = 'Дом';
             break;
           case 'palace':
-            card.children[5].textContent = 'Дворец';
+            cardType.textContent = 'Дворец';
             break;
         }
-        card.children[6].textContent = pinInfo.offer.rooms + ' комнаты для ' + pinInfo.offer.guests + ' гостей';
-        card.children[7].textContent = 'Заезд после ' + pinInfo.offer.checkin + ' выезд до ' + pinInfo.offer.checkout;
-        for (var k = 0; k < card.children[8].children.length; k++) {
+        cardRooms.textContent = pinInfo.offer.rooms + ' комнаты для ' + pinInfo.offer.guests + ' гостей';
+        cardTime.textContent = 'Заезд после ' + pinInfo.offer.checkin + ' выезд до ' + pinInfo.offer.checkout;
+        for (var k = 0; k < cardFeaturesItems.length; k++) {
+          var isMatched;
           pinInfo.offer.features.some(function (it) {
-            if (card.children[8].children[k].className.endsWith(it)) {
-              card.children[8].children[k].textContent = it;
+            if (cardFeaturesItems[k].className.endsWith(it)) {
+              cardFeaturesItems[k].textContent = it;
+              isMatched++;
             }
           });
+          if (!isMatched) {
+            cardFeaturesList[0].removeChild(cardFeaturesItems[k]);
+          }
+          isMatched = 0;
         }
-        card.children[9].textContent = pinInfo.offer.description;
-        card.children[10].children[0].src = pinInfo.offer.photos[0];
+        cardDesc.textContent = pinInfo.offer.description;
+        cardPhotos.children[0].src = pinInfo.offer.photos[0];
         for (var j = 1; j < pinInfo.offer.photos.length; j++) {
           var imgClone = document.createElement('img');
           imgClone.src = pinInfo.offer.photos[j];
-          imgClone.width = card.children[10].children[0].width;
-          imgClone.height = card.children[10].children[0].height;
-          imgClone.alt = card.children[10].children[0].alt;
+          imgClone.width = cardPhotos.children[0].width;
+          imgClone.height = cardPhotos.children[0].height;
+          imgClone.alt = cardPhotos.children[0].alt;
           imgClone.classList.add('popup__photo');
-          card.children[10].appendChild(imgClone);
+          cardPhotos.appendChild(imgClone);
         }
         var onPopupEscPress = function (evt) {
           if (evt.keyCode === ESC_KEYCODE) {
@@ -61,11 +79,11 @@
           }
         };
         document.addEventListener('keydown', onPopupEscPress);
-        card.children[1].addEventListener('click', function () {
+        cardCloseBtn.addEventListener('click', function () {
           card.remove();
           document.addEventListener('keydown', onPopupEscPress);
         });
-        card.children[1].addEventListener('keydown', function (evt) {
+        cardCloseBtn.addEventListener('keydown', function (evt) {
           if (evt.keyCode === ENTER_KEYCODE) {
             card.remove();
           }
