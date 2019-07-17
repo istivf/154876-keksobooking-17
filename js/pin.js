@@ -50,7 +50,7 @@
         cardRooms.textContent = pinInfo.offer.rooms + ' комнаты для ' + pinInfo.offer.guests + ' гостей';
         cardTime.textContent = 'Заезд после ' + pinInfo.offer.checkin + ' выезд до ' + pinInfo.offer.checkout;
         for (var k = 0; k < cardFeaturesItems.length; k++) {
-          var isMatched;
+          var isMatched = 0;
           pinInfo.offer.features.some(function (it) {
             if (cardFeaturesItems[k].className.endsWith(it)) {
               cardFeaturesItems[k].textContent = it;

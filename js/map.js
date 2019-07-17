@@ -79,8 +79,14 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  var lastTimeout;
   var startRerenderPins = function () {
-    window.rerenderPins();
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      window.rerenderPins();
+    }, 500);
   };
 
   inputFilters.forEach(function (it) {
@@ -118,7 +124,7 @@
             var adPrice;
             if (ad.offer.price < 10000) {
               adPrice = 'low';
-            } else if (ad.offer.price >= 10000 || filter.value <= 50000) {
+            } else if (ad.offer.price >= 10000 && filter.value <= 50000) {
               adPrice = 'middle';
             } else if (ad.offer.price > 50000) {
               adPrice = 'high';
@@ -148,7 +154,7 @@
       });
       return null;
     });
-    window.ads.slice(0, window.MAX_ADS_AMOUNT);
+    window.ads = window.ads.slice(0, window.MAX_ADS_AMOUNT);
     pins = window.getAds(window.ads);
     mapPins.appendChild(pins);
   };
