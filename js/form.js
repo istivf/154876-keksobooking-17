@@ -28,7 +28,7 @@
   var mainPin = document.querySelector('.map__pin--main');
   var addressInput = document.querySelector('#address');
   var avatarInput = form.querySelector('#avatar');
-  var avatar = form.querySelector('.ad-form-header__preview');
+  var avatar = form.querySelector('.ad-form-header__preview img');
   var imagesInput = form.querySelector('#images');
   var imagesContainer = form.querySelector('.ad-form__photo-container');
   var images = form.querySelector('.ad-form__photo');
@@ -53,7 +53,7 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        avatar.children[0].src = reader.result;
+        avatar.src = reader.result;
       });
 
       reader.readAsDataURL(file);
@@ -184,7 +184,7 @@
     features.forEach(function (el) {
       el.checked = false;
     });
-    avatar.children[0].src = 'img/muffin-grey.svg';
+    avatar.src = 'img/muffin-grey.svg';
     var adImages = form.querySelectorAll('div[data-img="added"]');
     if (adImages) {
       adImages.forEach(function (img) {
