@@ -5,7 +5,8 @@
   var mapPins = document.querySelector('.map__pins');
   var main = document.querySelector('main');
   var mainPin = document.querySelector('.map__pin--main');
-  var housingType = document.querySelector('#housing-type');
+  var inputFilters = document.querySelectorAll('.map__filter');
+  var checkboxFilters = document.querySelectorAll('.map__checkbox');
   var form = document.querySelector('.ad-form');
   var formFielsets = form.querySelectorAll('fieldset');
   var addressInput = document.querySelector('#address');
@@ -78,8 +79,22 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  housingType.addEventListener('input', function () {
-    window.rerenderPins();
+  var lastTimeout;
+  var startRerenderPins = function () {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      window.rerenderPins();
+    }, 500);
+  };
+
+  inputFilters.forEach(function (it) {
+    it.addEventListener('input', startRerenderPins);
+  });
+
+  checkboxFilters.forEach(function (it) {
+    it.addEventListener('click', startRerenderPins);
   });
 
   window.rerenderPins = function () {
@@ -91,11 +106,55 @@
     adCards.forEach(function (el) {
       map.removeChild(el);
     });
-    window.ads = window.xhrResponse.filter(function (ad) {
-      return ad.offer.type === housingType.value;
-    }).filter(function (ad, index) {
-      return index < window.MAX_ADS_AMOUNT;
+    window.ads = window.xhrResponse;
+    inputFilters.forEach(function (filter) {
+      if (filter.value === 'any') {
+        return false;
+      }
+
+      window.ads = window.ads.filter(function (ad) {
+        var adValueName = filter.name.replace('housing-', '');
+        var result;
+
+        switch (adValueName) {
+          case 'type':
+            result = ad.offer.type === filter.value;
+            break;
+          case 'price':
+            var adPrice;
+            if (ad.offer.price < 10000) {
+              adPrice = 'low';
+            } else if (ad.offer.price >= 10000 && filter.value <= 50000) {
+              adPrice = 'middle';
+            } else if (ad.offer.price > 50000) {
+              adPrice = 'high';
+            }
+            result = adPrice === filter.value;
+            break;
+          case 'rooms':
+            result = ad.offer.rooms === parseInt(filter.value, 10);
+            break;
+          case 'guests':
+            result = ad.offer.guests === parseInt(filter.value, 10);
+            break;
+        }
+        return result;
+      });
+
+      return null;
     });
+
+    checkboxFilters.forEach(function (checkbox) {
+      if (checkbox.checked === false) {
+        return false;
+      }
+
+      window.ads = window.ads.filter(function (ad) {
+        return ad.offer.features.includes(checkbox.value);
+      });
+      return null;
+    });
+    window.ads = window.ads.slice(0, window.MAX_ADS_AMOUNT);
     pins = window.getAds(window.ads);
     mapPins.appendChild(pins);
   };
