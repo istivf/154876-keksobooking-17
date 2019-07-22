@@ -86,23 +86,28 @@
     formFielsets[a].setAttribute('disabled', 'disabled');
   }
 
+  var BUNGALO_MIN_PRICE = 0;
+  var FLAT_MIN_PRICE = 1000;
+  var HOUSE_MIN_PRICE = 5000;
+  var PALACE_MIN_PRICE = 10000;
+
   housingType.addEventListener('input', function () {
     switch (housingType.value) {
       case 'bungalo':
-        minPrice.setAttribute('min', 0);
-        minPrice.placeholder = '0';
+        minPrice.setAttribute('min', BUNGALO_MIN_PRICE);
+        minPrice.placeholder = String(BUNGALO_MIN_PRICE);
         break;
       case 'flat':
-        minPrice.setAttribute('min', 1000);
-        minPrice.placeholder = '1000';
+        minPrice.setAttribute('min', FLAT_MIN_PRICE);
+        minPrice.placeholder = String(FLAT_MIN_PRICE);
         break;
       case 'house':
-        minPrice.setAttribute('min', 5000);
-        minPrice.placeholder = '5000';
+        minPrice.setAttribute('min', HOUSE_MIN_PRICE);
+        minPrice.placeholder = String(HOUSE_MIN_PRICE);
         break;
       case 'palace':
-        minPrice.setAttribute('min', 10000);
-        minPrice.placeholder = '10000';
+        minPrice.setAttribute('min', PALACE_MIN_PRICE);
+        minPrice.placeholder = String(PALACE_MIN_PRICE);
         break;
     }
   });
@@ -168,19 +173,17 @@
     document.addEventListener('keydown', onMessageEscPress);
   };
 
-  var onSuccessHandler = function () {
-    renderSuccessMessage();
+  var resetForm = function () {
     adTitle.value = '';
     adDesc.value = '';
     minPrice.value = '';
-    mainPin.style.top = 375 + 'px';
-    mainPin.style.left = 570 + 'px';
     addressInput.value = mainPin.offsetLeft + ', ' + mainPin.offsetTop;
     housingType.value = 'flat';
     roomNumber.value = '1';
+    capacity.value = '1';
     timeIn.value = '12:00';
     timeOut.value = '12:00';
-    var features = Array.from(form.querySelectorAll('input[type="checkbox"]'));
+    var features = form.querySelectorAll('input[type="checkbox"]');
     features.forEach(function (el) {
       el.checked = false;
     });
@@ -191,6 +194,16 @@
         imagesContainer.removeChild(img);
       });
     }
+  };
+
+  var resetPage = function () {
+    window.resetMap();
+    resetForm();
+  };
+
+  var onSuccessHandler = function () {
+    renderSuccessMessage();
+    resetPage();
   };
 
   var onErrorHandler = function (status, statusText) {
@@ -220,5 +233,5 @@
     window.send(new FormData(form), onSuccessHandler, onErrorHandler);
   });
 
-  clearFormBtn.addEventListener('click', onSuccessHandler);
+  clearFormBtn.addEventListener('click', resetPage);
 })();

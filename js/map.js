@@ -10,8 +10,11 @@
   var form = document.querySelector('.ad-form');
   var formFielsets = form.querySelectorAll('fieldset');
   var addressInput = document.querySelector('#address');
-  var PIN_WIDTH = 65;
-  var PIN_HEIGHT = 85;
+  var filtersContainer = map.querySelector('.map__filters-container');
+  window.PIN_WIDTH = 65;
+  window.PIN_HEIGHT = 85;
+  var MAIN_PIN_Y = mainPin.offsetTop;
+  var MAIN_PIN_X = mainPin.offsetLeft;
 
   var adsAdded = false;
 
@@ -124,7 +127,7 @@
             var adPrice;
             if (ad.offer.price < 10000) {
               adPrice = 'low';
-            } else if (ad.offer.price >= 10000 && filter.value <= 50000) {
+            } else if (ad.offer.price >= 10000 && ad.offer.price <= 50000) {
               adPrice = 'middle';
             } else if (ad.offer.price > 50000) {
               adPrice = 'high';
@@ -157,5 +160,26 @@
     window.ads = window.ads.slice(0, window.MAX_ADS_AMOUNT);
     pins = window.getAds(window.ads);
     mapPins.appendChild(pins);
+  };
+
+  window.resetMap = function () {
+    var pins = mapPins.querySelectorAll('[type="button"]');
+    var cards = map.querySelectorAll('.map__card');
+    pins.forEach(function (pin) {
+      mapPins.removeChild(pin);
+    });
+    cards.forEach(function (card) {
+      map.removeChild(card);
+    });
+    mainPin.style.top = MAIN_PIN_Y + 'px';
+    mainPin.style.left = MAIN_PIN_X + 'px';
+    var filters = filtersContainer.querySelectorAll('.map__filter');
+    filters.forEach(function (filter) {
+      filter.value = 'any';
+    });
+    var pinFeatures = filtersContainer.querySelectorAll('.map__checkbox');
+    pinFeatures.forEach(function (checkbox) {
+      checkbox.checked = false;
+    });
   };
 })();
