@@ -180,7 +180,7 @@
     addressInput.value = mainPin.offsetLeft + ', ' + mainPin.offsetTop;
     housingType.value = 'flat';
     roomNumber.value = '1';
-    capacity.value = '1';
+    capacity.children[2].setAttribute('selected', 'selected');
     timeIn.value = '12:00';
     timeOut.value = '12:00';
     var features = form.querySelectorAll('input[type="checkbox"]');

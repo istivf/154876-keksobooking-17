@@ -32,4 +32,15 @@
     };
   };
   window.load();
+
+  // var loadSuccess = function () {
+  //   window.xhrResponse = xhr.response;
+  //   window.ads = window.xhrResponse.slice(0, window.MAX_ADS_AMOUNT);
+  // };
+  //
+  // var loadError = function () {
+  //   var message = errorMessageTemplate.cloneNode(true);
+  //   message.firstElementChild.textContent = 'Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
+  //   main.appendChild(message);
+  // };
 })();

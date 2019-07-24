@@ -11,8 +11,8 @@
   var formFielsets = form.querySelectorAll('fieldset');
   var addressInput = document.querySelector('#address');
   var filtersContainer = map.querySelector('.map__filters-container');
-  window.PIN_WIDTH = 65;
-  window.PIN_HEIGHT = 85;
+  var PIN_WIDTH = 65;
+  var PIN_HEIGHT = 85;
   var MAIN_PIN_Y = mainPin.offsetTop;
   var MAIN_PIN_X = mainPin.offsetLeft;
 
