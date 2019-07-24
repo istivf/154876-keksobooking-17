@@ -13,7 +13,7 @@
           onLoad();
           break;
         default:
-          onError();
+          onError(xhr.status, xhr.statusText);
           break;
       }
     });
