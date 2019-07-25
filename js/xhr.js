@@ -1,19 +1,19 @@
 'use strict';
 
 (function () {
-  window.getXhr = function (url, onLoad, onError, data) {
+  window.serverRequest = function (type, url, onSuccess, onError, requestBody) {
     var xhr = new XMLHttpRequest();
     var SUCCESSFUL_STATUS = 200;
     xhr.responseType = 'json';
-    xhr.open('POST', url);
-    xhr.send(data);
+    xhr.open(type, url);
+    xhr.send(requestBody);
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
         case SUCCESSFUL_STATUS:
-          onLoad();
+          onSuccess(xhr);
           break;
         default:
-          onError(xhr.status, xhr.statusText);
+          onError(xhr);
           break;
       }
     });

@@ -57,17 +57,22 @@
       mainPin.style.top = (shift.y - (objShift.y - coords.y)) + 'px';
       mainPin.style.left = (shift.x - (objShift.x - coords.x) - main.offsetLeft) + 'px';
 
-      if (mainPin.offsetTop < (130)) {
-        mainPin.style.top = 130 + 'px';
+      var TOP_EDGE = 130;
+      var BOTTOM_EDGE = 630;
+      var LEFT_EDGE = 0;
+      var RIGHT_EDGE = 1200;
+
+      if (mainPin.offsetTop < (TOP_EDGE)) {
+        mainPin.style.top = TOP_EDGE + 'px';
       }
-      if (mainPin.offsetTop > 630) {
-        mainPin.style.top = 630 + 'px';
+      if (mainPin.offsetTop > BOTTOM_EDGE) {
+        mainPin.style.top = BOTTOM_EDGE + 'px';
       }
-      if (mainPin.offsetLeft < 0) {
-        mainPin.style.left = 0 + 'px';
+      if (mainPin.offsetLeft < LEFT_EDGE) {
+        mainPin.style.left = LEFT_EDGE + 'px';
       }
-      if (mainPin.offsetLeft > 1200) {
-        mainPin.style.left = 1200 + 'px';
+      if (mainPin.offsetLeft > RIGHT_EDGE) {
+        mainPin.style.left = RIGHT_EDGE + 'px';
       }
 
       addressInput.value = (mainPin.offsetLeft + Math.ceil((PIN_WIDTH / 2))) + ', ' + (mainPin.offsetTop + PIN_HEIGHT);
@@ -119,17 +124,19 @@
         var adValueName = filter.name.replace('housing-', '');
         var result;
 
+        var MIN_AD_PRICE = 10000;
+        var MAX_AD_PRICE = 50000;
         switch (adValueName) {
           case 'type':
             result = ad.offer.type === filter.value;
             break;
           case 'price':
             var adPrice;
-            if (ad.offer.price < 10000) {
+            if (ad.offer.price < MIN_AD_PRICE) {
               adPrice = 'low';
-            } else if (ad.offer.price >= 10000 && ad.offer.price <= 50000) {
+            } else if (ad.offer.price >= MIN_AD_PRICE && ad.offer.price <= MAX_AD_PRICE) {
               adPrice = 'middle';
-            } else if (ad.offer.price > 50000) {
+            } else if (ad.offer.price > MAX_AD_PRICE) {
               adPrice = 'high';
             }
             result = adPrice === filter.value;

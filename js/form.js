@@ -33,8 +33,12 @@
   var imagesContainer = form.querySelector('.ad-form__photo-container');
   var images = form.querySelector('.ad-form__photo');
   var clearFormBtn = form.querySelector('.ad-form__reset');
+  var PIN_WIDTH = 65;
+  var PIN_HEIGHT = 85;
   var ESC_KEYCODE = 27;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+  clearFormBtn.removeAttribute('type');
 
   var checkPicture = function (file) {
     var fileName = file.name.toLowerCase();
@@ -120,7 +124,7 @@
     timeIn.value = timeOut.value;
   });
 
-  roomNumber.addEventListener('input', function () {
+  var switchRoomNumber = function () {
     switch (roomNumber.value) {
       case '1':
         capacity.value = '1';
@@ -151,7 +155,9 @@
         capacity.children[2].setAttribute('disabled', 'disabled');
         break;
     }
-  });
+  };
+
+  roomNumber.addEventListener('input', switchRoomNumber);
 
   var renderSuccessMessage = function () {
     var messageTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -177,10 +183,10 @@
     adTitle.value = '';
     adDesc.value = '';
     minPrice.value = '';
-    addressInput.value = mainPin.offsetLeft + ', ' + mainPin.offsetTop;
+    addressInput.value = (mainPin.offsetLeft + Math.ceil((PIN_WIDTH / 2))) + ', ' + (mainPin.offsetTop + PIN_HEIGHT);
     housingType.value = 'flat';
     roomNumber.value = '1';
-    capacity.children[2].setAttribute('selected', 'selected');
+    switchRoomNumber();
     timeIn.value = '12:00';
     timeOut.value = '12:00';
     var features = form.querySelectorAll('input[type="checkbox"]');
@@ -206,12 +212,12 @@
     resetPage();
   };
 
-  var onErrorHandler = function (status, statusText) {
+  var onErrorHandler = function (xhr) {
     var messageTemplate = document.querySelector('#error').content.querySelector('.error');
     var messageBlock = messageTemplate.cloneNode(true);
     var messagePar = messageBlock.querySelector('.error__message');
     var messageClose = messageBlock.querySelector('.error__button');
-    messagePar.textContent = 'Произошла ошибка: ' + status + ' ' + statusText;
+    messagePar.textContent = 'Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText;
     main.appendChild(messageBlock);
     var onMessageEscPress = function (evt) {
       if (evt.keyCode === ESC_KEYCODE) {
@@ -233,5 +239,7 @@
     window.send(new FormData(form), onSuccessHandler, onErrorHandler);
   });
 
-  clearFormBtn.addEventListener('click', resetPage);
+  clearFormBtn.addEventListener('click', function () {
+    resetPage();
+  });
 })();
